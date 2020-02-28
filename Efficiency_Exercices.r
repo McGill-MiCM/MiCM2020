@@ -1,4 +1,8 @@
-
+######################################
+### 1.  An overview of efficiency
+## 1.2 R-specific rules
+# 1.2.1 Data types and structures
+######################################
 # double
 class(5); is.double(5)
 
@@ -86,34 +90,50 @@ head(mtcars)
 # Access a column (variable) in data frames
 mtcars$mpg
 
+######################################
+# 1.2.2 To show CPU usage
+######################################
 # Let's try to invert a large matrix.
 A <- diag(4000)
 # A.inv <- solve(A)
 
+######################################
+# 1.2.1 To show integration with other languages
+######################################
 # optim() in R calls C programs, run optim to see source code.
 # optim
 
+######################################
+## 1.3 Time your program in R
+# 1.3.1 Vectorized
+######################################
 # Vectorized operation
 t <- system.time( x1 <- sqrt(1:1000000) )
 head(x1)
 
+######################################
+# 1.3.2 For loop with pre-allocation
+######################################
 # We can do worse
 # For loop with memory pre-allocation
 x2 <- rep(NA, 1000000)
 t0 <- proc.time()
 for (i in 1:1000000) {
-    x2[i] <- sqrt(i)
+  x2[i] <- sqrt(i)
 }
 t1 <- proc.time()
 
 identical(x1, x2) # Check whether results are the same
 
+######################################
+# 1.3.3 For loop without pre-allocation
+######################################
 # Even worse
 # For loop without memory pre-allocation
 x3 <- NULL
 t2 <- proc.time()
 for (i in 1:1000000) {
-    x3[i] <- sqrt(i)
+  x3[i] <- sqrt(i)
 }
 t3 <- proc.time()
 
@@ -123,12 +143,15 @@ identical(x2, x3) # Check whether results are the same
 t; t1 - t0; t3 - t2
 # ?proc.time
 
+######################################
+# Take-home message: loops bad (for time efficiency)
+######################################
 # microbenchmark runs the code multiple times and take a summary
 library(microbenchmark)
 result <- microbenchmark(sqrt(1:1000000),
                          for (i in 1:1000000) {x2[i] <- sqrt(i)},
                          unit = "s", times = 20
-                        )
+)
 summary(result)
 # Result in seconds
 
@@ -136,22 +159,28 @@ summary(result)
 result <- microbenchmark(sqrt(500),
                          500^0.5,
                          unit = "ns", times = 1000
-                        )
+)
 summary(result)
 # Result in nanoseconds
 
+
+######################################
+### 2. Efficient coding
+## 2.1 Powerful functions in R
+######################################
 data <- read.csv("https://raw.githubusercontent.com/ly129/MiCM/master/sample.csv", header = TRUE)
 head(data, 10)
 
 summary(data)
 
+# a1. Calculate the mean writing hand span of all individuals
 mean(data$Wr.Hnd)
-
+# a2. Calculate the mean height of all individuals, exclude the missing values
 mean(data$Height)
 ?mean
 
 mean(data$Height, na.rm = TRUE)
-
+# a3. Calculate the mean of all continuous variables
 cts.var <- sapply(X = data, FUN = is.double) # We'll talk about sapply later.
 cts <- data[ , cts.var]
 head(cts)
@@ -160,7 +189,7 @@ head(cts)
 apply(X = cts, MARGIN = 2, FUN = mean)
 
 apply(X = cts, MARGIN = 2, FUN = mean, na.rm = T)
-
+# b1. Calculare the count/proportion of females and males
 fm <- table(data$Sex)
 fm
 
@@ -169,13 +198,13 @@ class(fm)
 fm/length(data$Sex)
 
 prop.table(fm)
-
+# b2. Calculate the count in each Smoke group
 table(data$Smoke)
-
+# b3. Calculate the count of males and females in each Smoke group
 table(data$Smoke, data$Sex)
 
 table(data[, c("Smoke", "Sex")])
-
+# c1. Calculate the standard deviation of writing hand span of females
 table <- aggregate(x = data$Wr.Hnd, by = list(Sex = data$Sex), FUN = sd)
 table
 # table[table$Sex == "Female",]
@@ -199,118 +228,61 @@ table2 <- tapply(X = data$Wr.Hnd,
                  simplify = F)
 table2
 str(table2)
-
+# c2. Calculare the standard deviation of writing hand span of all different Sex-Smoke groups
 aggregate(x = data$Wr.Hnd,
           by = list(Sex = data$Sex, Smoke = data$Smoke),
           FUN = sd)
 
 aggregate(Wr.Hnd~Sex + Smoke, data = data, FUN = sd)
-
+# c3. Calculate the standard deviation of writing hand and non-writing hand span of all Sex-Smoke groups
 aggregate(cbind(Wr.Hnd, NW.Hnd) ~ Sex + Smoke, data = data, FUN = sd)
 
 name <- aggregate(x = cbind(data$Wr.Hnd, data$NW.Hnd),
-          by = list(Sex = data$Sex, Smoke = data$Smoke),
-          FUN = sd)
+                  by = list(Sex = data$Sex, Smoke = data$Smoke),
+                  FUN = sd)
 name
 
 aggregate(Wr.Hnd~Sex+Smoke, data = data, FUN = print)
 
-aggregate(Wr.Hnd~Sex+Smoke, data = data, FUN = length)
+######################################
+# Exercises
+######################################
+# Repeat b1-b3 using aggregate()
 
-aggregate(Wr.Hnd~Sex+Smoke, data = data, FUN = hist)
+# Make histograms of writing hand span for all eight Sex-Smoke groups using aggregate()
 
-vec <- 1:5
-vec
+# d1. Categorize 'Age" - make a new binary variable 'Adult'
+# Hint: ifelse(test, yes, no)
 
-ifelse(vec>3, yes = "big", no = "small")
+# d2. Categorize 'Wr.Hnd'into 5 groups - make a new categorical variable with 5 levels:
+# 1. =< 16: Stephen Curry
+# 2. 16-18: Drake
+# 3. 18-20: Fred VanVleet
+# 4. 20-22: Jeremy Lin
+# 5. > 22: Kawhi Leonard
+# Hint: cut(x, breaks, labels = NULL, right = TRUE, ...)
 
-adult <- 18
-data$Adult <- ifelse(data$Age>=18, "Yes", "No")
-head(data)
+# e1. Calculate the mean Wr.Hnd span of each Hnd.group
 
-if (data$Age >= 18) {
-    data$Adult2 = "Yes"
-} else {
-    data$Adult2 = "No"
-}
-head(data)
+# e2. Calculate the mean Wr.Hnd span of each Hnd.group without using aggregate, by, tapply
+# Hints: split(x, f, ...)    lapply(X, FUN, ...)    sapply(X, FUN, ..., simplify = TRUE)
 
-# Delete Adult2
-data <- subset(data, select=-c(Adult2))
+# f. Calculate the 95% sample confidence intervals of Wr.Hnd in each Smoke group
+# Hint: It cannot be done in one lign, so it must be done step by step, with one variable for the lower bound(s) and one for the upper bound(s)
 
-cut.points <- c(0, 16, 18, 20, 22, Inf)
-data$Hnd.group <- cut(data$Wr.Hnd, breaks = cut.points, right = TRUE)
-head(data)
-# labels as default
 
-# Set labels to false
-data$Hnd.group <- cut(data$Wr.Hnd,
-                      breaks = cut.points,
-                      labels = F, right = TRUE)
-head(data)
-
-# Customized labels
-label <- c("Curry", "Drake", "VanVleet", "Lin", "Leonard")
-data$Hnd.group <- cut(data$Wr.Hnd,
-                      breaks = cut.points,
-                      labels = label, right = TRUE)
-head(data)
-
-aggregate(Wr.Hnd~Hnd.group, data = data, FUN = mean)
-
-# cut.points <- c(0, 16, 18, 20, 22, Inf)
-Wr.Hnd.Grp <- split(data$Wr.Hnd, f = data$Hnd.group)
-Wr.Hnd.Grp
-
-# lapply
-la <- lapply(Wr.Hnd.Grp, FUN = summary)
-la
-class(la)
-
-# sapply
-sa <- sapply(X = Wr.Hnd.Grp, FUN = summary, simplify = T)
-sa
-class(sa)
-# See what simplify does
-
-sa <- sapply(X = Wr.Hnd.Grp, FUN = summary, simplify = F)
-sa
-class(sa)
-
-# vapply *
-# Safer than sapply(), and a little bit faster
-# because FUN.VALUE has to be specified that length and type should match
-# Any idea why it can be a little bit faster? Recall...
-va <- vapply(Wr.Hnd.Grp, summary, FUN.VALUE = c("Min." = numeric(1),
-                                                "1st Qu." = numeric(1),
-                                                "Median" = numeric(1),
-                                                "Mean" = numeric(1),
-                                                "3rd Qu." = numeric(1),
-                                                "Max." = numeric(1)))
-va
-
-# aggregate(Wr.Hnd~Smoke, data = data, FUN = ...)
-# tapply(X = data$Wr.Hnd, INDEX = list(data$Smoke), FUN = ...)
-
-sample.mean <- aggregate(Wr.Hnd~Smoke, data = data, FUN = mean)$Wr.Hnd
-sample.sd <- aggregate(Wr.Hnd~Smoke, data = data, FUN = sd)$Wr.Hnd
-n <- aggregate(Wr.Hnd~Smoke, data = data, FUN = length)$Wr.Hnd
-t <- qt(p = 0.025, df = n - 1, lower.tail = FALSE)
-sample.mean; sample.sd; n; t
-lb <- sample.mean - t * sample.sd / sqrt(n)
-ub <- sample.mean + t * sample.sd / sqrt(n)
-lb; ub
-# How many times did we aggregate according to the group? Can on aggregate only once?
-
+######################################
+## 2.2 Write our own functions in R
+######################################
 # The structure
 func_name <- function(argument){
-    statement
+  statement
 }
 
 # Build the function
 times2 <- function(x) {
-    fx = 2 * x
-    return(fx)
+  fx = 2 * x
+  return(fx)
 }
 # Use the function
 times2(x = 5)
@@ -322,9 +294,9 @@ times2(5)
 9 %% 2
 
 int.div <- function(a, b){
-    int <- a%/%b
-    mod <- a%%b
-    return(list(integer = int, modulus = mod))
+  int <- a%/%b
+  mod <- a%%b
+  return(list(integer = int, modulus = mod))
 }
 
 # class(result)
@@ -333,23 +305,26 @@ result <- int.div(21, 4)
 result$integer
 
 int.div <- function(a, b){
-    int <- a%/%b
-    mod <- a%%b
-    return(cat(a, "%%", b, ": \n integer =", int,"\n ------------------", " \n modulus =", mod, "\n"))
+  int <- a%/%b
+  mod <- a%%b
+  return(cat(a, "%%", b, ": \n integer =", int,"\n ------------------", " \n modulus =", mod, "\n"))
 }
 int.div(21,4)
 
 int.div <- function(a, b){
-    int <- a%/%b
-    mod <- a%%b
-    return(c(a, b))
+  int <- a%/%b
+  mod <- a%%b
+  return(c(a, b))
 }
 int.div(21, 4)
 
+######################################
+# Chatbot
+######################################
 # No need to worry about the details here.
 # Just want to show that functions do not always have to return() something.
 AIcanadian <- function(who, reply_to) {
-    system(paste("say -v", who, "Sorry!"))
+  system(paste("say -v", who, "Sorry!"))
 }
 AIcanadian("Alex", "Sorry I stepped on your foot.")
 
@@ -370,9 +345,12 @@ chat_log <- rep(NA, 8)
 # }
 # chat_log
 
+######################################
+# Check one summary statistic by Smoke group
+######################################
 data_summary <- function(func) {
-    data <- read.csv("https://raw.githubusercontent.com/ly129/MiCM/master/sample.csv", header = TRUE)
-    by(data = data$Wr.Hnd, INDICES = list(data$Smoke), FUN = func)
+  data <- read.csv("https://raw.githubusercontent.com/ly129/MiCM/master/sample.csv", header = TRUE)
+  by(data = data$Wr.Hnd, INDICES = list(data$Smoke), FUN = func)
 }
 data_summary(mean)
 
@@ -383,18 +361,16 @@ data_summary(mean)
 # lb <- sample.mean - t * sample.sd / sqrt(n)
 # ub <- sample.mean + t * sample.sd / sqrt(n)
 
-sample_CI <- function(x) {
-    m <- mean(x)
-    l <- length(x)
-    s <- sd(x)
-    t <- qt(p = .025, df = l - 1, lower.tail = FALSE)
-    lb <- m - t* s / sqrt(l)
-    ub <- m + t * s / sqrt(l)
-    return(c(LowerBound = lb, UpperBound = ub))
-}
+######################################
+# Exercise
+######################################
+# Make a function to calculate sample confidence intervals (see ex. f in section 2.1)
 
-aggregate(Wr.Hnd~Smoke, data = data, FUN = sample_CI)
 
+######################################
+### 3. Efficient computing
+## 3.1 Parallel computing
+######################################
 library(parallel)
 detectCores()
 #Multi-core computing not supported on Windows :(
@@ -403,15 +379,15 @@ mat.list <- sapply(c(1, 5, 200, 250, 1800, 2000), diag)
 print(head(mat.list, 2)) # print() makes the output here look the same as in R/Rstudio
 
 system.time(
-    sc <- lapply(mat.list, solve)
+  sc <- lapply(mat.list, solve)
 )
 
 system.time(
-    mc <- mclapply(mat.list, solve, mc.preschedule = TRUE, mc.cores = 3)
+  mc <- mclapply(mat.list, solve, mc.preschedule = TRUE, mc.cores = 3)
 )
 
 system.time(
-    mc <- mclapply(mat.list, solve, mc.preschedule = FALSE, mc.cores = 3)
+  mc <- mclapply(mat.list, solve, mc.preschedule = FALSE, mc.cores = 3)
 )
 
 t <- proc.time()
@@ -440,6 +416,9 @@ cl <- makeCluster(3)
 stopCluster(cl)
 proc.time() - t
 
+######################################
+## 3.2 Integration with C++
+######################################
 library(Rcpp)
 sourceCpp("sqrt_cpp.cpp")
 square_root(1:4)
@@ -459,13 +438,13 @@ mat_mul(a, b)
 bchmk <- microbenchmark(a %*% b,
                         mat_mul(a, b),
                         unit = "us", times = 100
-                       )
+)
 summary(bchmk)
 
 # Here we make an R function that calls the C++ function
 mmc <- function(a, b) {
-    result <- mat_mul(a, b)$MatrixMultiplication
-    return(result)
+  result <- mat_mul(a, b)$MatrixMultiplication
+  return(result)
 }
 mmc(a, b)
 
@@ -474,8 +453,8 @@ mmc(a, b)
 library(RcppArmadillo)
 cppFunction(depends = "RcppArmadillo",
             code = 'arma::mat mm(arma::mat& A, arma::mat& B){
-                        return A * B;
-                    }'
+            return A * B;
+            }'
 )
 
 mm(a, b)
@@ -483,15 +462,18 @@ mm(a, b)
 
 # We can wrap this naive function in an R function to manipulate input and output in R
 mmc2 <- function(A, B) {
-    if (ncol(A) == nrow(B)) {
-        return(mm(A, B))
-    } else {
-        stop("non-conformable arguments")
-    }
+  if (ncol(A) == nrow(B)) {
+    return(mm(A, B))
+  } else {
+    stop("non-conformable arguments")
+  }
 }
 mmc2(a, b)
 # mmc2(b, a)
 
+######################################
+## 3.3 Integration with Fortran
+######################################
 set.seed(20190813)
 
 ra <- 2
@@ -525,31 +507,31 @@ result
 class(result)
 
 mmf <- function(A, B) {
-    ra <- nrow(A)
-    ca <- ncol(A)
-    rb <- nrow(B)
-    cb <- ncol(B)
-    
-    if (ca == rb) {
-        result <- .Fortran("mat_mul_for",
-                            A = as.double(A),
-                            B = as.double(B),
-                            AB = double(ra * cb),
-                            RowA = as.integer(ra),
-                            ColA = as.integer(ca),
-                            RowB = as.integer(rb),
-                            ColB = as.integer(cb),
-                            RowAB = as.integer(ra),
-                            ColAB = as.integer(cb)
-                            )
-        mm <- matrix(result$AB, nrow = result$RowAB, byrow = F)
-    } else {
-        stop('non-conformable arguments')
-    }
-    return(list(Result = mm,
-                Dimension = c(result$RowAB, result$ColAB)
-               )
-          )
+  ra <- nrow(A)
+  ca <- ncol(A)
+  rb <- nrow(B)
+  cb <- ncol(B)
+  
+  if (ca == rb) {
+    result <- .Fortran("mat_mul_for",
+                       A = as.double(A),
+                       B = as.double(B),
+                       AB = double(ra * cb),
+                       RowA = as.integer(ra),
+                       ColA = as.integer(ca),
+                       RowB = as.integer(rb),
+                       ColB = as.integer(cb),
+                       RowAB = as.integer(ra),
+                       ColAB = as.integer(cb)
+    )
+    mm <- matrix(result$AB, nrow = result$RowAB, byrow = F)
+  } else {
+    stop('non-conformable arguments')
+  }
+  return(list(Result = mm,
+              Dimension = c(result$RowAB, result$ColAB)
+  )
+  )
 }
 
 set.seed(20190813)
@@ -566,6 +548,9 @@ mmf(A, B)
 
 A %*% B
 
+######################################
+### 4. Exercices
+######################################
 # Something like this.
 9 %/% 2; 9%%2
 
@@ -578,7 +563,7 @@ lm(Wr.Hnd~NW.Hnd+Age, data = data)
 
 # Something like this, both inputs are R functions.
 GD <- function(objective_function, gradient_function, initial_value) {
-    statements
+  statements
 }
 
 
