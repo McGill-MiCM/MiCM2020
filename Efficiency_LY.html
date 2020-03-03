@@ -14406,7 +14406,7 @@ TRUE
 
 <div class="output_text output_subarea ">
 <pre>   user  system elapsed 
-  0.007   0.006   0.012 </pre>
+  0.007   0.004   0.011 </pre>
 </div>
 
 </div>
@@ -14420,7 +14420,7 @@ TRUE
 
 <div class="output_text output_subarea ">
 <pre>   user  system elapsed 
-  0.068   0.003   0.071 </pre>
+  0.068   0.004   0.072 </pre>
 </div>
 
 </div>
@@ -14508,8 +14508,8 @@ Calculate the square root using sqrt( ) vs. our own implementation.</p>
 	<tr><th scope=col>&lt;fct&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
 </thead>
 <tbody>
-	<tr><td>sqrt(500)</td><td> 80</td><td> 90</td><td>102.192</td><td> 94</td><td>101</td><td>1338</td><td>1000</td></tr>
-	<tr><td>500^0.5  </td><td>155</td><td>166</td><td>190.853</td><td>174</td><td>177</td><td>8243</td><td>1000</td></tr>
+	<tr><td>sqrt(500)</td><td> 80</td><td> 90</td><td> 99.246</td><td> 94</td><td>102</td><td>1680</td><td>1000</td></tr>
+	<tr><td>500^0.5  </td><td>156</td><td>165</td><td>184.260</td><td>172</td><td>177</td><td>8610</td><td>1000</td></tr>
 </tbody>
 </table>
 
@@ -16050,9 +16050,7 @@ $$ CI = \bar{x} \pm t_{n-1, 0.025} \times \sqrt{\frac{s^2}{n}} $$<p>where $\bar{
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<ol>
-<li>(Vectorized operation) Calculate BMI for every individual ($\mathrm{BMI} = \mathrm{weight}(kg)/\mathrm{height}(m)^2$)</li>
-</ol>
+<h4 id="1.-(Vectorized-operation)-Calculate-BMI-for-every-individual">1. (Vectorized operation) Calculate BMI for every individual<a class="anchor-link" href="#1.-(Vectorized-operation)-Calculate-BMI-for-every-individual">&#182;</a></h4><p>$\mathrm{BMI} = \mathrm{weight}(kg)/\mathrm{height}(m)^2$</p>
 
 </div>
 </div>
@@ -16073,15 +16071,11 @@ $$ CI = \bar{x} \pm t_{n-1, 0.025} \times \sqrt{\frac{s^2}{n}} $$<p>where $\bar{
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<ol>
-<li>(Categorization) BMI Categories: <ul>
-<li>Underweight = &lt;18.5</li>
-<li>Normal weight = 18.5–24.9 </li>
-<li>Overweight = 25–29.9 </li>
-<li>Obesity = BMI of 30 or greater</li>
-</ul>
-</li>
-</ol>
+<h4 id="2.-(Categorization)-BMI-Categories:">2. (Categorization) BMI Categories:<a class="anchor-link" href="#2.-(Categorization)-BMI-Categories:">&#182;</a></h4>
+<pre><code>- Underweight = &lt;18.5
+- Normal weight = 18.5–24.9 
+- Overweight = 25–29.9 
+- Obesity = BMI of 30 or greater</code></pre>
 
 </div>
 </div>
@@ -16089,10 +16083,7 @@ $$ CI = \bar{x} \pm t_{n-1, 0.025} \times \sqrt{\frac{s^2}{n}} $$<p>where $\bar{
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<ol>
-<li>(*apply) Mean BMI of each BMI group</li>
-</ol>
-
+<h4 id="3.-(*apply)-Mean-BMI-of-each-BMI-group">3. (*apply) Mean BMI of each BMI group<a class="anchor-link" href="#3.-(*apply)-Mean-BMI-of-each-BMI-group">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -16112,10 +16103,7 @@ $$ CI = \bar{x} \pm t_{n-1, 0.025} \times \sqrt{\frac{s^2}{n}} $$<p>where $\bar{
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<ol>
-<li>(Aggregation) Proportion with heart failure in each BMI-treatment group</li>
-</ol>
-
+<h4 id="4.-(Aggregation)-Proportion-with-heart-failure-in-each-BMI-treatment-group">4. (Aggregation) Proportion with heart failure in each BMI-treatment group<a class="anchor-link" href="#4.-(Aggregation)-Proportion-with-heart-failure-in-each-BMI-treatment-group">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -16168,17 +16156,13 @@ $$ CI = \bar{x} \pm t_{n-1, 0.025} \times \sqrt{\frac{s^2}{n}} $$<p>where $\bar{
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<ol>
-<li><p>Write a function that allow user to specify</p>
-<ul>
-<li>a dataset</li>
-<li>the (binary) treatment variable</li>
-<li>the (binary) outcome variable</li>
-</ul>
-<p>and return a cross-tabulation (a 2x2 table).</p>
-</li>
-</ol>
+<h4 id="5.-Write-a-function-that-allow-user-to-specify">5. Write a function that allow user to specify<a class="anchor-link" href="#5.-Write-a-function-that-allow-user-to-specify">&#182;</a></h4>
+<pre><code>- a dataset
+- the (binary) treatment variable
+- the (binary) outcome variable
 
+</code></pre>
+<h4 id="and-return-a-cross-tabulation-(a-2x2-table).">and return a cross-tabulation (a 2x2 table).<a class="anchor-link" href="#and-return-a-cross-tabulation-(a-2x2-table).">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -16198,10 +16182,7 @@ $$ CI = \bar{x} \pm t_{n-1, 0.025} \times \sqrt{\frac{s^2}{n}} $$<p>where $\bar{
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<ol>
-<li>Pro. The function should be able to check whether the treatment/outcome variables are binary or not. Continuous variables will be dichotomized based on a user-defined threshold.</li>
-</ol>
-
+<h4 id="5-Pro.-The-function-should-be-able-to-check-whether-the-treatment/outcome-variables-are-binary-or-not.-Continuous-variables-will-be-dichotomized-based-on-a-user-defined-threshold.">5 Pro. The function should be able to check whether the treatment/outcome variables are binary or not. Continuous variables will be dichotomized based on a user-defined threshold.<a class="anchor-link" href="#5-Pro.-The-function-should-be-able-to-check-whether-the-treatment/outcome-variables-are-binary-or-not.-Continuous-variables-will-be-dichotomized-based-on-a-user-defined-threshold.">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -16221,10 +16202,7 @@ $$ CI = \bar{x} \pm t_{n-1, 0.025} \times \sqrt{\frac{s^2}{n}} $$<p>where $\bar{
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<ol>
-<li>Specific task in your own research</li>
-</ol>
-
+<h4 id="6.-Specific-task-in-your-own-research">6. Specific task in your own research<a class="anchor-link" href="#6.-Specific-task-in-your-own-research">&#182;</a></h4>
 </div>
 </div>
 </div>
