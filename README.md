@@ -18,3 +18,6 @@ Department of Epidemiology, Biostatistics and Occupational Health, McGill Univer
 1. [R](https://www.r-project.org)
 2. [RStudio](https://rstudio.com)
     - [RStudio Cheat Sheets](https://rstudio.com/resources/cheatsheets/)
+3. [Jupyter Notebook](https://jupyter.org)
+4. [Tidyverse](https://www.tidyverse.org)
+    - If you think you still need this after the workshop.
