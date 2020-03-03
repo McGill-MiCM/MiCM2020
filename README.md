@@ -16,3 +16,5 @@ Department of Epidemiology, Biostatistics and Occupational Health, McGill Univer
 
 ### Useful Links
 1. [R](https://www.r-project.org)
+2. [RStudio](https://rstudio.com)
+    - [RStudio Cheat Sheets](https://rstudio.com/resources/cheatsheets/)
