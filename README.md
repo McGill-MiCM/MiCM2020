@@ -6,6 +6,8 @@ Department of Epidemiology, Biostatistics and Occupational Health, McGill Univer
 ## 2020-03-06, 2020-03-07
 
 ### Workshop Materials
+#### Intro
+- [Introduction](MiCM_workshop2020_LY.pdf)
 #### Notes
 - March 06
     - [HTML](Efficiency_LY_20200306.ipynb)
