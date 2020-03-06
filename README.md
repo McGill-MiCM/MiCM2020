@@ -6,22 +6,22 @@ Department of Epidemiology, Biostatistics and Occupational Health, McGill Univer
 ## 2020-03-06, 2020-03-07
 
 ### Workshop Materials
-#### 1. Notes
-##### March 06
-- [HTML](Efficiency_LY_20200306.ipynb)
-- [PDF](Efficiency_LY_20200306.pdf)
+#### Notes
+- March 06
+    - [HTML](Efficiency_LY_20200306.ipynb)
+    - [PDF](Efficiency_LY_20200306.pdf)
 
-##### March 07
-- [HTML](Efficiency_LY_20200307.ipynb)
-- [PDF](Efficiency_LY_20200307.pdf)
+- March 07
+    - [HTML](Efficiency_LY_20200307.ipynb)
+    - [PDF](Efficiency_LY_20200307.pdf)
 
-#### 2. R code
-##### March 06
-- [Workshop code](Efficiency_LY_20200306.r)
-##### March 07
-- [Workshop code](Efficiency_LY_20200307.r)
+#### R code
+- March 06
+    - [Workshop code](Efficiency_LY_20200306.r)
+- March 07
+    - [Workshop code](Efficiency_LY_20200307.r)
 
-#### 3. Data
+#### Data
 - [Teaching data](sample.csv)
 
 ### Useful Links
