@@ -3,16 +3,26 @@
 Efficient coding and computing
 ## Yi Lian
 Department of Epidemiology, Biostatistics and Occupational Health, McGill University
-## 2020-03-06
+## 2020-03-06, 2020-03-07
 
 ### Workshop Materials
 #### Notes
-1. [HTML](Efficiency_LY.ipynb)
-2. [PDF](Efficiency_LY.pdf)
+##### March 06
+- [HTML](Efficiency_LY_20200306.ipynb)
+- [PDF](Efficiency_LY_20200306.pdf)
 
-#### R codes and data
-1. [Workshop code](Efficiency_LY.r)
-2. [Teaching data](sample.csv)
+##### March 07
+- [HTML](Efficiency_LY_20200307.ipynb)
+- [PDF](Efficiency_LY_20200307.pdf)
+
+#### R code
+##### March 06
+- [Workshop code](Efficiency_LY_20200306.r)
+##### March 07
+- [Workshop code](Efficiency_LY_20200307.r)
+
+#### Data
+- [Teaching data](sample.csv)
 
 ### Useful Links
 1. [R](https://www.r-project.org)
